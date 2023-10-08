@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        /* Для работы es модулей */
+        "target": "ES2020",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+
+        /* От куда и куда собираем */
+        "baseUrl": "./src",
+        "outDir": "./dist/js",
+
+        /* Всякие правила для проверки типов */
+        "strict": true,
+        "allowJs": true,
+        "skipLibCheck": true,
+        "noImplicitAny": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true
+    }
+}
