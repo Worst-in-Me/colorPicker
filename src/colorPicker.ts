@@ -1,17 +1,3 @@
-// const body = document.querySelector('body');
-
-// export function map<Item, Result>(list: Item[], fn: (arg: Item, idx: number) => Result): Result[] {
-//     const result: Result[] = [];
-//     for (const [idx, val] of list.entries()) {
-//         result.push(fn(val, idx));
-//     }
-
-//     return result;
-// }
-
-// const k = new Array<number>(1, 2, 3);
-// const b = map(k, String);
-
 const createCanvas = (width: number, height: number): HTMLCanvasElement => {
     const canvas = document.createElement('canvas');
     canvas.width = width;
@@ -24,15 +10,51 @@ export const createColorPicker = () => {
     const canvas = createCanvas(40, 1536);
     const ctx = canvas.getContext('2d')!;
 
+    const rgb = [255, 0, 0]; // red;
+    let sign = 1;
+    let index = 1;
+
+    const colors: string[] = [];
+
+    const pickColorFromHeight = (height: number): string => {
+        const step = (height / 255) | 0;
+        const color = height - step * 255;
+        switch (step) {
+            case 0:
+                colors.push(`rgb(${255}, ${color}, ${0})`);
+                return `rgb(${255}, ${color}, ${0})`;
+            case 1:
+                colors.push(`rgb(${255 - color}, ${255}, ${0})`);
+                return `rgb(${255 - color}, ${255}, ${0})`;
+            case 2:
+                colors.push(`rgb(${0}, ${255}, ${color})`);
+                return `rgb(${0}, ${255}, ${color})`;
+            case 3:
+                colors.push(`rgb(${0}, ${255 - color}, ${255})`);
+                return `rgb(${0}, ${255 - color}, ${255})`;
+            case 4:
+                colors.push(`rgb(${color}, ${0}, ${255})`);
+                return `rgb(${color}, ${0}, ${255})`;
+            case 5:
+                colors.push(`rgb(${255}, ${0}, ${255 - color})`);
+                return `rgb(${255}, ${0}, ${255 - color})`;
+            default:
+                return `rgb(${255}, ${0}, ${0})`;
+        }
+    };
+
+    const pickHeightOnClick = () => {
+        canvas.addEventListener('click', (event) => {
+            document.body.style.backgroundColor = colors[event.offsetY];
+        });
+    };
+
     const paintHueMap = () => {
         //red to blue
-        const rgb = [255, 0, 0]; // red;
-        let sign = 1;
-        let index = 1;
-        for (const value of new Array(256 * 6).keys()) {
-            const [r, g, b] = rgb;
-            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-            ctx.fillRect(0, value, 40, 1);
+
+        for (const height of new Array(255 * 6).keys()) {
+            ctx.fillStyle = pickColorFromHeight(height);
+            ctx.fillRect(0, height, 40, 1);
 
             rgb[index] += sign;
             if (rgb[index] === 255 || rgb[index] === 0) {
@@ -43,6 +65,7 @@ export const createColorPicker = () => {
                 else index = 1;
             }
         }
+        pickHeightOnClick();
 
         // for (const b of new Array(256).keys()) {
         //     ctx.fillStyle = `rgb(255, 0, ${b})`;
