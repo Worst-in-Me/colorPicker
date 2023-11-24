@@ -1,0 +1,52 @@
+body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin: 40px;
+}
+
+.buttonsBar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    width: 45%;
+    height: fit-content;
+
+    background-color: #fff;
+    margin: 2.5rem;
+    padding: 1rem;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.16), 0px 2px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    transition: box-shadow 0.25s;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.16) inset, 0px 2px 10px 0px rgba(0, 0, 0, 0.12) inset;
+}
+
+.button:hover {
+    box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.16) inset, 0px 2px 10px 0px rgba(0, 0, 0, 0.12) inset;
+}
+
+.savedColor {
+    width: fit-content;
+    padding: 0 5px;
+}
+
+.buttonClear {
+    background-color: #fff;
+}
+
+.buttonSave {
+    color: #111;
+}

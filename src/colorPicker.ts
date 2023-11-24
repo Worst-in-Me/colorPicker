@@ -6,9 +6,26 @@ const createCanvas = (width: number, height: number): HTMLCanvasElement => {
     return canvas;
 };
 
+const createElement = (elementName: string, className: string, content: string): HTMLElement => {
+    const element = document.createElement(elementName);
+    element.className = className;
+    element.append(content);
+
+    return element;
+};
+
 export const createColorPicker = () => {
-    const canvas = createCanvas(40, 1536);
+    const buttonsBar = createElement('div', 'buttonsBar', '');
+    const buttonClear = createElement('div', 'buttonClear button', 'Clear');
+    const buttonSave = createElement('div', 'buttonSave button', 'Save');
+    document.body.appendChild(buttonsBar);
+    buttonsBar.append(buttonClear, buttonSave);
+
+    const scale = 0.3;
+    const canvas = createCanvas(40, 1536 * scale);
     const ctx = canvas.getContext('2d')!;
+
+    ctx.scale(1, scale);
 
     const rgb = [255, 0, 0]; // red;
     let sign = 1;
@@ -45,7 +62,32 @@ export const createColorPicker = () => {
 
     const pickHeightOnClick = () => {
         canvas.addEventListener('click', (event) => {
-            document.body.style.backgroundColor = colors[event.offsetY];
+            document.body.style.backgroundColor = colors[(event.offsetY / scale) | 0];
+            buttonSave.style.backgroundColor = colors[(event.offsetY / scale) | 0];
+        });
+    };
+
+    const clearMap = () => {
+        buttonClear.addEventListener('click', () => {
+            document.body.style.backgroundColor = '#fff';
+            buttonSave.style.backgroundColor = '#fff';
+
+            const pickedColors = document.querySelectorAll('.savedColor');
+            // console.log(pickedColors);
+            for (const color of pickedColors) color.remove();
+
+            // console.log(pickedColors);
+        });
+    };
+
+    const saveColor = () => {
+        buttonSave.addEventListener('click', () => {
+            if (buttonSave.style.backgroundColor !== '#fff') {
+                const savedColor = createElement('div', 'button savedColor', '');
+                savedColor.style.backgroundColor = buttonSave.style.backgroundColor;
+                savedColor.textContent = buttonSave.style.backgroundColor;
+                buttonsBar.append(savedColor);
+            }
         });
     };
 
@@ -66,33 +108,8 @@ export const createColorPicker = () => {
             }
         }
         pickHeightOnClick();
-
-        // for (const b of new Array(256).keys()) {
-        //     ctx.fillStyle = `rgb(255, 0, ${b})`;
-        //     ctx.fillRect(0, b, 400, 1);
-        // }
-        // for (const r of new Array(256).keys()) {
-        //     ctx.fillStyle = `rgb(${255 - r}, 0, 255)`;
-        //     ctx.fillRect(0, 256 + r, 400, 1);
-        // }
-        // //blue to green
-        // for (const g of new Array(256).keys()) {
-        //     ctx.fillStyle = `rgb(0, ${g}, 255)`;
-        //     ctx.fillRect(0, 256 * 2 + g, 400, 1);
-        // }
-        // for (const b of new Array(256).keys()) {
-        //     ctx.fillStyle = `rgb(0, 255, ${255 - b})`;
-        //     ctx.fillRect(0, 256 * 3 + b, 400, 1);
-        // }
-        // //green to red
-        // for (const r of new Array(256).keys()) {
-        //     ctx.fillStyle = `rgb(${r}, 255, 0)`;
-        //     ctx.fillRect(0, 256 * 4 + r, 400, 1);
-        // }
-        // for (const g of new Array(256).keys()) {
-        //     ctx.fillStyle = `rgb(255, ${255 - g}, 0)`;
-        //     ctx.fillRect(0, 256 * 5 + g, 400, 1);
-        // }
+        saveColor();
+        clearMap();
     };
 
     paintHueMap();

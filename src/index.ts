@@ -1,6 +1,6 @@
 import { createColorPicker } from './colorPicker.js';
 
 const colorPicker = createColorPicker();
-colorPicker.style.cssText = 'transform: scaleY(0.3)';
+// colorPicker.style.cssText = 'transform: scaleY(0.3)';
 
-document.body.append(colorPicker);
+document.body.appendChild(colorPicker);
